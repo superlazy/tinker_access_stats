@@ -9,7 +9,6 @@ from datetime import datetime
 
 def lambda_generate_stats(event, context):
     token = os.environ['SLACK_BOT_TOKEN']
-    print('Token:' + token)
     history = get_machine_usage_history(slack_bot_token=token)
     summary = build_machine_usage_summary(messages=history['messages'])
 
@@ -30,6 +29,10 @@ def get_machine_usage_history(weeks=6, slack_bot_token=None, channel_id='C0K5VBM
     :param channel_id: {str} The #machine-usage channel ID (currently is C0K5VBMPS)
     :return: {dict} The slack API response as a dictionary
     """
+    print('Token: ' + slack_bot_token)
+    print('Channel: ' + channel_id)
+    print('Weeks: ' + str(weeks))
+
     # verify that we have an access token
     if slack_bot_token is None:
         raise Exception('Parameter slack_bot_token is required')

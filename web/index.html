@@ -1,0 +1,28 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="histogram.css">
+</head>
+
+<body onload="init()">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script type="text/javascript" src="histogram.js"></script>
+    <div class="controls">
+      <select id="toolSelect" onchange="changeTool()"></select>
+      <select id="daySelect" onchange="changeTool()">
+        <option>Sunday</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+      </select>
+    </div>
+    <div class="histogram">
+        <canvas id="histogram"></canvas>
+    </div>
+</body>
+
+</html>
