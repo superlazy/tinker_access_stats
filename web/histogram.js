@@ -14,6 +14,14 @@ var init = function()
 		type: 'bar',
 		data: barChartData,
 		options: {
+			scales: {
+				yAxes : [{
+					ticks : {
+						max : 100,
+						min : 0
+					}
+				}]
+			},
 			responsive: true,
 			legend: {
 				position: 'top',
