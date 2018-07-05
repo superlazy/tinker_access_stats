@@ -72,7 +72,7 @@ var changeTool = function()
   var tool = $('#toolSelect').val();
   var day  = $('#daySelect').val();
 
-  var offset  = new Date().getTimezoneOffset() / 60;
+  var offset  = 0;
   var shifted = [];
   for( var i = 0; i < 24; i++ )
     shifted[i] = 100 * stats[tool][day][(i+offset)%24];
