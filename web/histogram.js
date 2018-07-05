@@ -51,10 +51,12 @@ var initSuccess = function(response)
 
   for( var tool in stats )
     if( stats.hasOwnProperty(tool) )
-      $('<option>')
-        .text(tool)
-        .appendTo(select);
+    	if( tool !== 'updated' )
+				$('<option>')
+					.text(tool)
+					.appendTo(select);
 
+  $('.update').text('Statistics last updated on ' + new Date(stats['updated']*1000));
   changeTool();
 };
 
@@ -85,5 +87,4 @@ var changeTool = function()
 	barChartData.datasets.push(newDataset);
 	window.myBar.update();
 };
-
 
