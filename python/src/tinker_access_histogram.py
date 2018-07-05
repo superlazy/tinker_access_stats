@@ -4,20 +4,40 @@ import time
 import operator
 import os
 import boto3
+from time import sleep
 from datetime import datetime
 
 
 def lambda_generate_stats(event, context):
-    token = os.environ['SLACK_BOT_TOKEN']
-    history = get_machine_usage_history(slack_bot_token=token)
-    summary = build_machine_usage_summary(messages=history['messages'])
+
+    attempts = 0
+    has_messages = False
+    while attempts < 5 and not has_messages:
+        token = os.environ['SLACK_BOT_TOKEN']
+        history = get_machine_usage_history(slack_bot_token=token)
+        summary = build_machine_usage_summary(messages=history['messages'])
+        has_messages = len(history['messages']) > 0
+        if not has_messages:
+            print('Attempt ' + str(attempts) + ' failed to return messages')
+            sleep(0.5)
+
+    if not has_messages:
+        print('No messages returned from Slack API')
+        return
+
+    bucket = 'tinker-access'
+    key = 'tinker-access-stats.json'
 
     s3 = boto3.client('s3')
     s3.put_object(
-        Bucket='tinker-access',
-        Key='tinker-access-stats.json',
+        Bucket=bucket,
+        Key=key,
         Body=json.dumps(summary).encode()
     )
+
+    s3 = boto3.resource('s3')
+    object_acl = s3.ObjectAcl(bucket, key)
+    object_acl.put(ACL='public-read')
 
 
 def get_machine_usage_history(weeks=6, slack_bot_token=None, channel_id='C0K5VBMPS'):
@@ -234,5 +254,7 @@ def __summarize_machine_usage(events, weeks):
             for hour in range(24):
                 summary[machine][day][hour] /= max_seconds
                 summary[machine][day][hour] = (summary[machine][day][hour] * 100 // 1) / 100
+
+    summary['updated'] = int(datetime.now().timestamp())
 
     return summary
