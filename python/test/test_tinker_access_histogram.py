@@ -30,5 +30,5 @@ def test_build_machine_usage_summary():
 
 if __name__ == '__main__':
     # test_get_machine_usage_history()
-    # test_build_machine_usage_summary()
-    lambda_generate_stats(None, None)
+    test_build_machine_usage_summary()
+    # lambda_generate_stats(None, None)

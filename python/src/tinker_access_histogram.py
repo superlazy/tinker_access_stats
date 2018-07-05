@@ -68,7 +68,6 @@ def get_machine_usage_history(weeks=6, slack_bot_token=None, channel_id='C0K5VBM
 
         # parse and return a successful response
         history = json.loads(response.read().decode('utf-8'))
-        print(json.dumps(history))
 
         # add the messages to our array aggregate
         for message in history['messages']:
@@ -152,6 +151,12 @@ def __sort_and_clean_events(events):
     # sort the array for each machine
     for machine in events.keys():
         events[machine].sort(key=operator.itemgetter('time'))
+
+    # convert timestamps to a naive Mountain Time Zone
+    for machine in events.keys():
+        for event in events[machine]:
+            # TODO: Standard Time vs. Daylight Saving Time
+            event['time'] = event['time'] - (6 * 3600)
 
     # clean up the data - make sure there are not multiple consecutive and
     # identical statuses (i.e., 'in use' and 'available' should alternate)
