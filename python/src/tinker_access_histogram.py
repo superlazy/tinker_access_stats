@@ -89,6 +89,11 @@ def get_machine_usage_history(weeks=6, slack_bot_token=None, channel_id='C0K5VBM
         # parse and return a successful response
         history = json.loads(response.read().decode('utf-8'))
 
+        # check for errors returned from the response
+        if not history['ok']:
+            print('Request failed: ' + history['error'])
+            exit(1)
+
         # add the messages to our array aggregate
         for message in history['messages']:
             messages.append(message)
